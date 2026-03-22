@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Feedback Form</title>
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Internal CSS (supplements the external sheet) -->
+  <style>
+    /* Decorative floating orbs */
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    body::before {
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(124,58,237,0.25), transparent 70%);
+      top: -100px;
+      right: -80px;
+    }
+    body::after {
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, rgba(59,130,246,0.2), transparent 70%);
+      bottom: -60px;
+      left: -60px;
+    }
+
+    /* Badge pill inside the card */
+    .badge {
+      display: inline-block;
+      margin: 0 auto 18px;
+      padding: 5px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #a78bfa;
+      background: rgba(167,139,250,0.12);
+      border: 1px solid rgba(167,139,250,0.25);
+      border-radius: 50px;
+    }
+
+    .card > .badge {
+      display: block;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Divider line */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      margin: 6px 0 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <span class="badge">📝 Feedback Portal</span>
+    <h1>Student Feedback</h1>
+    <p class="subtitle">Help us improve — share your thoughts</p>
+    <div class="divider"></div>
+
+    <form id="feedbackForm" novalidate>
+
+      <!-- Student Name -->
+      <div class="form-group">
+        <label for="name">Student Name</label>
+        <input type="text" id="name" placeholder="Enter your full name" />
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email ID</label>
+        <input type="email" id="email" placeholder="you@example.com" />
+      </div>
+
+      <!-- Mobile -->
+      <div class="form-group">
+        <label for="mobile">Mobile Number</label>
+        <input type="text" id="mobile" placeholder="10-digit mobile number" maxlength="10" />
+      </div>
+
+      <!-- Department -->
+      <div class="form-group">
+        <label for="department">Department</label>
+        <select id="department">
+          <option value="">Select Department</option>
+          <option value="Computer Science">Computer Science</option>
+          <option value="IT">IT</option>
+          <option value="Mechanical">Mechanical</option>
+          <option value="Civil">Civil</option>
+        </select>
+      </div>
+
+      <!-- Gender -->
+      <div class="form-group">
+        <label>Gender</label>
+        <div class="radio-group">
+          <label for="genderMale">
+            <input type="radio" id="genderMale" name="gender" value="Male" />
+            Male
+          </label>
+          <label for="genderFemale">
+            <input type="radio" id="genderFemale" name="gender" value="Female" />
+            Female
+          </label>
+        </div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="form-group">
+        <label for="feedback">Feedback Comments</label>
+        <textarea id="feedback" placeholder="Write your feedback here (at least 10 words)..."></textarea>
+      </div>
+
+      <!-- Buttons -->
+      <div class="btn-row">
+        <button type="submit" id="submitBtn" class="btn btn-submit">Submit Feedback</button>
+        <button type="reset"  id="resetBtn"  class="btn btn-reset">Reset</button>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- JavaScript Validation -->
+  <script>
+    document.getElementById('feedbackForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      var name            = document.getElementById('name').value.trim();
+      var email           = document.getElementById('email').value.trim();
+      var mobile          = document.getElementById('mobile').value.trim();
+      var department      = document.getElementById('department').value;
+      var genderMale      = document.getElementById('genderMale').checked;
+      var genderFemale    = document.getElementById('genderFemale').checked;
+      var feedback        = document.getElementById('feedback').value.trim();
+
+      // 1. Name must not be empty
+      if (name === '') {
+        alert('Name is required');
+        return;
+      }
+
+      // 2. Email must be valid format
+      var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        alert('Please enter a valid email');
+        return;
+      }
+
+      // 3. Mobile must be exactly 10 digits
+      var mobilePattern = /^\d{10}$/;
+      if (!mobilePattern.test(mobile)) {
+        alert('Mobile number must be 10 digits');
+        return;
+      }
+
+      // 4. Gender must be selected
+      if (!genderMale && !genderFemale) {
+        alert('Please select a gender');
+        return;
+      }
+
+      // 5. Department must not be default
+      if (department === '') {
+        alert('Please select a department');
+        return;
+      }
+
+      // 6. Feedback must contain at least 10 words
+      var wordCount = feedback.split(/\s+/).filter(function (w) { return w.length > 0; }).length;
+      if (wordCount < 10) {
+        alert('Feedback must contain at least 10 words');
+        return;
+      }
+
+      // All valid
+      alert('Feedback Submitted Successfully');
+    });
+  </script>
+
+</body>
+</html>
